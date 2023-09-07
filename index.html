@@ -52,6 +52,9 @@
       function matchCrush() {
         const crushNameInput = document.getElementById("crushName");
         const crushName = crushNameInput.value;
+
+        if (!crushName) return;
+
         const normalizedCrushName = normalizeName(crushName);
 
         // Check if we already have a result for this name
