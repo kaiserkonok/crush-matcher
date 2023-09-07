@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crush Matcher</title>
+    <!-- Include Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      #result {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1 class="text-center">Crush Matcher</h1>
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              id="crushName"
+              class="form-control"
+              placeholder="Enter the name of your crush"
+              onkeydown="if (event.key === 'Enter') matchCrush()"
+            />
+            <button class="btn btn-success" onclick="matchCrush()">
+              Find out!
+            </button>
+          </div>
+        </div>
+      </div>
+      <p id="result" class="text-center"></p>
+    </div>
+
+    <script>
+      const results = JSON.parse(localStorage.getItem("results")) || {};
+
+      function normalizeName(name) {
+        return name.toLowerCase();
+      }
+
+      function saveResults() {
+        localStorage.setItem("results", JSON.stringify(results));
+      }
+
+      function matchCrush() {
+        const crushNameInput = document.getElementById("crushName");
+        const crushName = crushNameInput.value;
+        const normalizedCrushName = normalizeName(crushName);
+
+        // Check if we already have a result for this name
+        if (results[normalizedCrushName] !== undefined) {
+          document.getElementById("result").textContent =
+            results[normalizedCrushName];
+          return;
+        }
+
+        const randomValue = Math.random();
+        console.log(randomValue);
+
+        // Use a threshold (e.g., 0.5) to determine the result
+        const isMatch = randomValue >= 0.5;
+
+        let resultText;
+        if (isMatch) {
+          resultText = `Congratulations! ${crushName} likes you too! 😍`;
+        } else {
+          resultText = `${crushName} does not have the same feelings for you. 😔`;
+        }
+
+        // Store the result for this name
+        results[normalizedCrushName] = resultText;
+
+        // Save the results to localStorage
+        saveResults();
+
+        // Display the result
+        document.getElementById("result").textContent = resultText;
+      }
+    </script>
+  </body>
+</html>
